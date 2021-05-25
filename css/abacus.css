@@ -63,6 +63,9 @@
  	height: var(--pearl-height);
  	margin: 2px;
  } 
+ .spacer{
+ 	transition: all 300ms;
+ }
  .spacer.active{
  	flex-grow:1;
  }
