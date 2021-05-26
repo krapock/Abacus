@@ -1,8 +1,6 @@
 :root {
   --border-color: black;
   --pearl-color: brown;
-  --pearl-width: 25px;
-  --pearl-height: 25px;
 }
 
 .abacus {
@@ -14,10 +12,12 @@
 }
 .abacus.horizontal {
 	flex-direction:row;
+	border-right-width:0;
 }
 
 .abacus.vertical {
 	flex-direction:column;
+	border-bottom-width:0;
 }
 
 

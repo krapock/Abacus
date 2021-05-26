@@ -87,7 +87,7 @@
 		}
 		this.resizePearls = () => {
 			//we want round pearls taking as much space as possible
-			let size = [...document.getElementsByClassName("column")].reduce( (acc,column) => {
+			let size = [...this.htmlRoot.getElementsByClassName("column")].reduce( (acc,column) => {
 				let maxSize = acc
 				let pearlCount = column.getElementsByClassName("pearl").length;
 				
@@ -105,10 +105,18 @@
 				return maxSize
 			},window.innerWidth);
 			
-			[...document.getElementsByClassName("pearl")].forEach(pearl => {
+			[...this.htmlRoot.getElementsByClassName("pearl")].forEach(pearl => {
 				pearl.style.width = size
 				pearl.style.height = size
 				})
+		}
+		this.setPearlsColor = (color)=>{
+			[...this.htmlRoot.getElementsByClassName("pearl")].forEach( pearl => {
+				pearl.style.backgroundColor=color
+			})
+		}
+		this.setPearlColor = (num,color)=>{
+			this.htmlRoot.getElementsByClassName("pearl")[num].style.backgroundColor=color;
 		}
 		
 		this.init=()=>{
@@ -120,6 +128,7 @@
 				console.warn("problem generating the abacus : "+e)
 			}
 		}
+		this.refresh = this.init;
 		this.init();
 	}
 	
@@ -144,7 +153,8 @@
 	document.addEventListener('DOMContentLoaded', (event) => {
 		let abacuses = document.getElementsByClassName("abacus")
 		for( x=0; x<abacuses.length; x++){
-			new Abacus(abacuses.item(x))
+			let jsObject = new Abacus(abacuses.item(x));
+			abacuses.item(x).abacus = jsObject;
 		}
 	});
 
