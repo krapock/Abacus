@@ -5,24 +5,27 @@
 		<script type="text/javascript" src="js/abacus.js"></script>
 		<!-- autorefresh dev feature -->
 		<script type="text/javascript" src="https://livejs.com/live.js"></script>
+		<style>
+		body{
+			width:100vw;
+			height:100vh;
+			display:flex;
+			justify-content: center;
+			align-items: center;
+			
+		}
+		.container{
+			width:60%;
+			height:60%;
+		}
+		</style>
 	</head>
 	<body>
-		<!-- 
-		<div class="menu">
-		  <select>
-		  	<option>vertical</option>
-		  	<option>horizontal</option>
-		  </select>
-		  <input name="rownum" type="text" placeholder="number of rows"/>
-		  <input name="rowstruct" type="text" placeholder="row structure"/>
-		  <input type="submit" value="generate"></input>
-		</div>
-		-->
-	
-		<div class="abacus"
-			 data-direction="vertical"
-		     data-rows="6x4 2x2 2x4 ,10x2" 
-		     data-counter="true"></div>
-		     
+	 	<div class="container">
+			<div class="abacus"
+				 data-direction="vertical"
+			     data-rows="6x4 2x2 2x4 ,10x2" 
+			     data-counter="true"></div>
+	  	</div>
 	</body>	
 </html>

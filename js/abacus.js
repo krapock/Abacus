@@ -12,7 +12,6 @@
 			this.attributes = {...this.attributes, ...this.htmlRoot.dataset}
 			this.attributes.rows = this.extendRowsNotation(this.attributes.rows)
 		}
-		
 		this.extendRowsNotation = base => {
 			return base.replace(/\s+/g,' ').split(',')
 				.map( line => line.trim().split(' ')
@@ -25,11 +24,11 @@
 						throw "wrong rows notation"
 					}))
 		}
-		
 		this.buildHtmlContent = ()=>{
 			removeClass(this.htmlRoot,'vertical horizontal')
 			addClass(this.htmlRoot,this.attributes.direction)
 			this.attributes.rows.forEach( this.addColumnGroup )
+			this.resizePearls()
 		}
 		
 		this.addColumnGroup = colGroupLength => {
@@ -60,7 +59,6 @@
 			
 			columnGroupNode.appendChild(column)
 		}
-		
 		this.togglePearl = pearl => {
 			console.log(pearl)
 			let siblings = [...pearl.parentNode.children];
@@ -86,6 +84,31 @@
 					}
 				}
 			}
+		}
+		this.resizePearls = () => {
+			//we want round pearls taking as much space as possible
+			let size = [...document.getElementsByClassName("column")].reduce( (acc,column) => {
+				let maxSize = acc
+				let pearlCount = column.getElementsByClassName("pearl").length;
+				
+				if(this.attributes.direction=="horizontal"){ 
+					maxSize = Math.min(
+						maxSize,
+						column.offsetHeight,
+						column.offsetWidth/(pearlCount+1)) 
+				}else{ 
+					maxSize = Math.min(
+						maxSize,
+						column.offsetWidth,
+						column.offsetHeight/(pearlCount+1)) 
+				} 
+				return maxSize
+			},window.innerWidth);
+			
+			[...document.getElementsByClassName("pearl")].forEach(pearl => {
+				pearl.style.width = size
+				pearl.style.height = size
+				})
 		}
 		
 		this.init=()=>{

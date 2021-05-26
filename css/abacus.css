@@ -1,15 +1,13 @@
 :root {
   --border-color: black;
   --pearl-color: brown;
-  --pearl-width: 75px;
-  --pearl-height: 60px;
+  --pearl-width: 25px;
+  --pearl-height: 25px;
 }
 
 .abacus {
-	width:60%;
-	height:60%;
-	
-	margin:auto;
+	width:100%;
+	height:100%;
 	
 	display:flex;
     border: 10px solid var(--border-color);
@@ -42,14 +40,18 @@
 
 
 .column{
+	flex-grow:1;
 	display:flex;
+	align-items:center;
 }
 
 .horizontal .column{
+	margin:5px 0;
 	flex-direction: row;
 	background-image: linear-gradient(to bottom, transparent 40%, black 40%, grey 52%, white 56%, black 60%, transparent 60%)
 }
 .vertical .column{
+	margin:0 5px;
 	flex-direction: column;
 	background-image: linear-gradient(to right, transparent 40%, black 40%, grey 52%, white 56%, black 60%, transparent 60%)
 }
@@ -58,11 +60,11 @@
 
  .pearl{
  	background-color: var(--pearl-color);
+ 	background-image: radial-gradient(#fff4 0%, transparent 40%, black 85%);
  	border-radius:50%;
- 	width: var(--pearl-width);
- 	height: var(--pearl-height);
- 	margin: 2px;
  } 
+
+ 
  .spacer{
  	transition: all 300ms;
  }
