@@ -6,14 +6,16 @@
 			direction:'vertical',
 			rows:'6x4',
 			counter:true,
+			colors:"brown",
 		}
 		
 		this.loadAttributes=()=>{
 			this.attributes = {...this.attributes, ...this.htmlRoot.dataset}
 			this.attributes.rows = this.extendRowsNotation(this.attributes.rows)
+			this.attributes.colors = this.extendColorsNotation(this.attributes.colors)
 		}
 		this.extendRowsNotation = base => {
-			return base.replace(/\s+/g,' ').split(',')
+			return base.trim().replace(/\s+/g,' ').split(',')
 				.map( line => line.trim().split(' ')
 					.flatMap( number => {
 						if(number.match(/^\d+$/)){ return Number(number) }
@@ -24,10 +26,20 @@
 						throw "wrong rows notation"
 					}))
 		}
+		this.extendColorsNotation = base => {
+			return base.trim().replace(/\s+/g,' ')
+				.replace(/\d+x\([^\)]*\)/g, group => {
+					let [rep,val]=group.split('x(')
+					val = val.slice(0,-1)+" "
+					return val.repeat( Number(rep) ).trim()
+				})
+				.split(' ')
+		}
 		this.buildHtmlContent = ()=>{
 			removeClass(this.htmlRoot,'vertical horizontal')
 			addClass(this.htmlRoot,this.attributes.direction)
 			this.attributes.rows.forEach( this.addColumnGroup )
+			this.colorizePearls()
 			this.resizePearls()
 		}
 		
@@ -85,6 +97,14 @@
 				}
 			}
 		}
+		this.colorizePearls = () => {
+			let pearls = [...this.htmlRoot.getElementsByClassName("pearl")];
+			let lastColor = this.attributes.colors[0];
+			for(let i=0;i<pearls.length;i++){
+				let color =	lastColor = (i<this.attributes.colors.length)? this.attributes.colors[i] : lastColor;
+				pearls[i].style.backgroundColor=color;
+			}
+		}
 		this.resizePearls = () => {
 			//we want round pearls taking as much space as possible
 			let size = [...this.htmlRoot.getElementsByClassName("column")].reduce( (acc,column) => {
@@ -109,14 +129,6 @@
 				pearl.style.width = size
 				pearl.style.height = size
 				})
-		}
-		this.setPearlsColor = (color)=>{
-			[...this.htmlRoot.getElementsByClassName("pearl")].forEach( pearl => {
-				pearl.style.backgroundColor=color
-			})
-		}
-		this.setPearlColor = (num,color)=>{
-			this.htmlRoot.getElementsByClassName("pearl")[num].style.backgroundColor=color;
 		}
 		
 		this.init=()=>{

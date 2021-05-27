@@ -13,7 +13,8 @@
 			refresh()
 		}
 		function setColor(color){
-			getAbacus().abacus.setPearlsColor(color);
+			getAbacus().dataset.colors=color
+			refresh()
 		}
 		</script>
 		<style>
@@ -32,8 +33,27 @@
 			flex-direction:row;
 			justify-content: center;
 		}
+		.color-button{
+			width:2rem;
+			height:2rem;
+			cursor:pointer;
+		}
+		
 		.menu>div{
 			padding-right:10px;
+		}
+		.menu .button{
+			color: #454545;
+			width: 2rem;
+			height: 2rem;
+			border: 2px solid grey;
+			border-radius : 5px;
+			font-size:200%;
+			font-weight: bold;
+			cursor:pointer;
+			text-align:center;
+			vertical-align:middle;
+			line-height: 1.1em;
 		}
 		.container{
 			width:60%;
@@ -43,16 +63,54 @@
 	</head>
 	<body>
 		<div class="menu">
-			<div onClick="setDirection('horizontal')">[ --- ]</div>
-			<div onClick="setDirection('vertical')">[ ||| ]</div>
-			<div onClick="setColor('blue')">[blue]</div>
-			<div onClick="setColor('green')">[green]</div>
+			<div onClick="setDirection('horizontal')">
+				<div class="button">&hArr;</div>
+			</div>
+			<div onClick="setDirection('vertical')">
+				<div class="button">&vArr;</div>
+			</div>
+			<div onClick="refresh()">
+				<div class="button">&#10226;</div>
+			</div>
+			<div onClick="setColor('black')">
+				<div class="color-button pearl" style="background-color:black"></div>
+			</div>
+			<div onClick="setColor('brown')">
+				<div class="color-button pearl" style="background-color:brown"></div>
+			</div>
+			<div onClick="setColor('orange')">
+				<div class="color-button pearl" style="background-color:orange"></div>
+			</div>
+			<div onClick="setColor('yellow')">
+				<div class="color-button pearl" style="background-color:yellow"></div>
+			</div>
+			<div onClick="setColor('green')">
+				<div class="color-button pearl" style="background-color:green"></div>
+			</div>
+			<div onClick="setColor('blue')">
+				<div class="color-button pearl" style="background-color:blue"></div>
+			</div>
+			<div onClick="setColor('purple')">
+				<div class="color-button pearl" style="background-color:purple"></div>
+			</div>
+			<div onClick="setColor('violet')">
+				<div class="color-button pearl" style="background-color:violet"></div>
+			</div>
+			<div onClick="setColor('white')">
+				<div class="color-button pearl" style="background-color:white"></div>
+			</div>
 		</div>
 	 	<div class="container">
 			<div class="abacus"
 				 data-direction="vertical"
 			     data-rows="6x4 2x2 2x4 ,10x2" 
-			     data-counter="true"></div>
+			     data-counter="true"
+			     data-colors="
+			     	6x(black brown orange green)
+			      	2x(orange green) 
+			      	2x(black brown orange green) 
+			      	10x(blue white)"
+			     ></div>
 	  	</div>
 	</body>	
 </html>
