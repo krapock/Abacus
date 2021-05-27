@@ -48,12 +48,12 @@
 .horizontal .column{
 	margin:5px 0;
 	flex-direction: row;
-	background-image: linear-gradient(to bottom, transparent 40%, black 40%, grey 52%, white 56%, black 60%, transparent 60%)
+	background-image: linear-gradient(to bottom, transparent 45%, black 45%, grey 51%, white 53%, black 55%, transparent 55%)
 }
 .vertical .column{
 	margin:0 5px;
 	flex-direction: column;
-	background-image: linear-gradient(to right, transparent 40%, black 40%, grey 52%, white 56%, black 60%, transparent 60%)
+	background-image: linear-gradient(to right, transparent 45%, black 45%, grey 51%, white 53%, black 55%, transparent 55%)
 }
 
 
