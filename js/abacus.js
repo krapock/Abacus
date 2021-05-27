@@ -7,12 +7,14 @@
 			rows:'6x4',
 			counter:true,
 			colors:"brown",
+			weights:"1",
 		}
 		
 		this.loadAttributes=()=>{
 			this.attributes = {...this.attributes, ...this.htmlRoot.dataset}
 			this.attributes.rows = this.extendRowsNotation(this.attributes.rows)
 			this.attributes.colors = this.extendColorsNotation(this.attributes.colors)
+			this.attributes.weights = this.extendWeightsNotation(this.attributes.weights)
 		}
 		this.extendRowsNotation = base => {
 			return base.trim().replace(/\s+/g,' ').split(',')
@@ -35,12 +37,25 @@
 				})
 				.split(' ')
 		}
+		this.extendWeightsNotation = base => {
+			return base.trim().replace(/\s+/g,' ').split(',')
+				.map( line => line.trim().split(' ')
+					.flatMap( number => {
+						if(number.match(/^\d+$/)){ return Number(number) }
+						else if(number.match(/^\d+x\d+$/)){
+							let [rep,val]=number.split('x')
+							return new Array(Number(rep)).fill(Number(val))
+						} 
+						throw "wrong weights notation"
+					}))
+		}
 		this.buildHtmlContent = ()=>{
 			removeClass(this.htmlRoot,'vertical horizontal')
 			addClass(this.htmlRoot,this.attributes.direction)
 			this.attributes.rows.forEach( this.addColumnGroup )
 			this.colorizePearls()
 			this.resizePearls()
+			this.addCounters()
 		}
 		
 		this.addColumnGroup = colGroupLength => {
@@ -72,7 +87,6 @@
 			columnGroupNode.appendChild(column)
 		}
 		this.togglePearl = pearl => {
-			console.log(pearl)
 			let siblings = [...pearl.parentNode.children];
 			let foundPearl = false
 			let foundActive = false
@@ -96,6 +110,7 @@
 					}
 				}
 			}
+			this.refreshCounters()
 		}
 		this.colorizePearls = () => {
 			let pearls = [...this.htmlRoot.getElementsByClassName("pearl")];
@@ -129,6 +144,56 @@
 				pearl.style.width = size
 				pearl.style.height = size
 				})
+		}
+		this.addCounters = () => {
+			if(!this.attributes.counter) { return } 
+			this.addWeights()
+			let counterNum = this.attributes.rows.reduce( (acc, row) => {
+				if(acc != row.length){  throw "unable to create counter : rows have different length" }
+				return acc
+			},this.attributes.rows[0].length)
+			
+			let counterGroup = document.createElement('div')
+			counterGroup.setAttribute('class','counter-group')
+			
+			for(let i=0;i<counterNum;i++){
+			 	let counter = document.createElement('div')
+			 	counter.setAttribute('class','counter')
+				counter.innerText = "0";
+				counterGroup.appendChild(counter)
+			}
+			this.htmlRoot.appendChild(counterGroup)
+		}
+		
+		this.addWeights = () => {
+			console.log( this.attributes.weights )
+				let colGroups = [...this.htmlRoot.getElementsByClassName("column-group")];
+				for(let i=0;i<colGroups.length;i++){
+					let colGroup = colGroups[i];
+					let columns = [...colGroup.children]
+					let lastWeight = this.attributes.weights[i][0];
+					for(let j=0;j<columns.length;j++){
+						columns[j].weight = lastWeight = (this.attributes.weights[i].length <= j)?lastWeight:this.attributes.weights[i][j]						
+					}
+				}
+		}
+		
+		this.refreshCounters = () => {
+			if(!this.attributes.counter) { return }
+			
+			for(let i=0;i<this.attributes.rows[0].length;i++){
+				let sum=0
+				for(let j=0;j<this.attributes.rows.length;j++){
+					let column = this.htmlRoot.children[j].children[i]
+					let divider = column.getElementsByClassName("active").item(0)
+					sum += [...column.children].indexOf(divider) / 2 * column.weight
+				}
+				let counter = this.htmlRoot.getElementsByClassName("counter").item(i)
+				counter.innerText = sum
+			}
+			
+			
+			
 		}
 		
 		this.init=()=>{
