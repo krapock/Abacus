@@ -133,23 +133,29 @@
 		}
 		this.resizePearls = () => {
 			//we want round pearls taking as much space as possible
-			let size = [...this.htmlRoot.getElementsByClassName("column")].reduce( (acc,column) => {
-				let maxSize = acc
-				let pearlCount = column.getElementsByClassName("pearl").length;
-				
-				if(this.attributes.direction=="horizontal"){ 
-					maxSize = Math.min(
-						maxSize,
-						column.offsetHeight,
-						column.offsetWidth/(pearlCount+1)) 
-				}else{ 
-					maxSize = Math.min(
-						maxSize,
-						column.offsetWidth,
-						column.offsetHeight/(pearlCount+1)) 
-				} 
-				return maxSize
-			},window.innerWidth);
+			let columnGroups = [...this.htmlRoot.getElementsByClassName("column-group")]
+			let maxColumns = columnGroups.reduce( (acc,columnGroup) => {
+				return Math.max(acc,columnGroup.children.length)
+			},0);
+			
+			let maxRows = [...this.htmlRoot.getElementsByClassName("column-group")].reduce( (acc,columnGroup) => {
+				return acc + [...columnGroup.getElementsByClassName("column")].reduce( (acc,column) => {
+					return Math.max(acc,column.getElementsByClassName("pearl").length);
+					},0);
+			},0);
+			
+			console.log(maxColumns+" x "+maxRows)
+			
+			let size = 0;
+			if(this.attributes.direction=="horizontal"){ 
+				size = Math.min(
+					this.htmlRoot.offsetHeight/maxColumns,
+					this.htmlRoot.offsetWidth/(maxRows+columnGroups.length+1)) 
+			}else{ 
+				size = Math.min(
+					this.htmlRoot.offsetWidth/maxColumns,
+					this.htmlRoot.offsetHeight/(maxRows+columnGroups.length+1)) 
+			} 
 			
 			[...this.htmlRoot.getElementsByClassName("pearl")].forEach(pearl => {
 				pearl.style.width = size
