@@ -21,7 +21,7 @@
 				.map( line => line.trim().split(' ')
 					.flatMap( number => {
 						if(number.match(/^\d+$/)){ return Number(number) }
-						else if(number.match(/^\d+x\d+$/)){
+						else if(number.match(/^\d+x-?\d+$/)){
 							let [rep,val]=number.split('x')
 							return new Array(Number(rep)).fill(Number(val))
 						} 
@@ -69,19 +69,30 @@
 		this.addColumn = (columnGroupNode, length) => {
 			let column = document.createElement('div')
 			column.setAttribute('class','column')
+			if(length<0){
+				column.inverted=true
+			}
 			
-			let spacer = document.createElement('div')
-			spacer.setAttribute('class','spacer active')
-			column.appendChild(spacer)
+			let firstSpacer = document.createElement('div')
+			firstSpacer.setAttribute('class','spacer')
+			column.appendChild(firstSpacer)
 			
-			for(let i=0;i<length;i++){
+			let lastSpacer = null;
+			
+			for(let i=0;i<Math.abs(length);i++){
 			 	let pearl = document.createElement('div')
 			 	pearl.setAttribute('class','pearl')
 				pearl.addEventListener('click', evt => this.togglePearl(evt.target))
 				column.appendChild(pearl)
-			 	let spacer = document.createElement('div')
-			 	spacer.setAttribute('class','spacer')
-				column.appendChild(spacer)
+			 	lastSpacer = document.createElement('div')
+			 	lastSpacer.setAttribute('class','spacer')
+				column.appendChild(lastSpacer)
+			}
+			
+			if(length>0){
+				addClass(firstSpacer,'active')
+			}else{
+				addClass(lastSpacer,'active')
 			}
 			
 			columnGroupNode.appendChild(column)
@@ -186,7 +197,11 @@
 				for(let j=0;j<this.attributes.rows.length;j++){
 					let column = this.htmlRoot.children[j].children[i]
 					let divider = column.getElementsByClassName("active").item(0)
-					sum += [...column.children].indexOf(divider) / 2 * column.weight
+					let position = [...column.children].indexOf(divider)
+					if(column.inverted){
+						position = column.children.length-1-position
+					}
+					sum += position / 2 * column.weight
 				}
 				let counter = this.htmlRoot.getElementsByClassName("counter").item(i)
 				counter.innerText = sum
