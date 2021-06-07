@@ -149,13 +149,16 @@
 			let size = 0;
 			if(this.attributes.direction=="horizontal"){ 
 				size = Math.min(
-					this.htmlRoot.offsetHeight/maxColumns,
+					(this.htmlRoot.offsetHeight-20)/maxColumns-10,
 					this.htmlRoot.offsetWidth/(maxRows+columnGroups.length+1)) 
 			}else{ 
 				size = Math.min(
-					this.htmlRoot.offsetWidth/maxColumns,
+					(this.htmlRoot.offsetWidth-20)/maxColumns-10,
 					this.htmlRoot.offsetHeight/(maxRows+columnGroups.length+1)) 
 			} 
+			
+			console.log(size);
+			console.log(this.htmlRoot.offsetWidth + " x " + this.htmlRoot.offsetHeight);
 			
 			[...this.htmlRoot.getElementsByClassName("pearl")].forEach(pearl => {
 				pearl.style.width = size
