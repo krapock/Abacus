@@ -1,6 +1,6 @@
 # Abacus
 a configurable abacus web page
-
+see more at https://krapock.github.io/Abacus/
 
 ## Configuration
  
